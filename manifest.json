@@ -1,0 +1,24 @@
+{
+    "name": "Ritsu & Kana",
+    "short_name": "結び",
+    "description": "律と佳夏のための、やさしいチャットアプリ",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#FDF8F3",
+    "theme_color": "#D4A574",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "./icons/icon-192.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "./icons/icon-512.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

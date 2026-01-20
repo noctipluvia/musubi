@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+    <defs>
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FDF8F3"/>
+            <stop offset="100%" style="stop-color:#F5EBE0"/>
+        </linearGradient>
+        <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#E8B4B8"/>
+            <stop offset="100%" style="stop-color:#D4A574"/>
+        </linearGradient>
+    </defs>
+    <rect width="192" height="192" rx="40" fill="url(#bg)"/>
+    <circle cx="96" cy="85" r="35" fill="url(#accent)" opacity="0.9"/>
+    <path d="M96 50 L106 75 L130 75 L110 92 L118 117 L96 102 L74 117 L82 92 L62 75 L86 75 Z" 
+          fill="#FDF8F3" opacity="0.95"/>
+    <text x="96" y="160" font-family="sans-serif" font-size="24" font-weight="600" 
+          fill="#8B7355" text-anchor="middle">結び</text>
+</svg>
