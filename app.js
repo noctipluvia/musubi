@@ -109,6 +109,7 @@ const elements = {
     sidebar: document.getElementById('sidebar'),
     chatList: document.getElementById('chat-list'),
     roomTabs: document.getElementById('room-tabs'),
+    homeBtn: document.getElementById('home-btn'),
     newChatBtn: document.getElementById('new-chat-btn'),
     downloadChatBtn: document.getElementById('download-chat-btn'),
     sidebarToggleBtn: document.getElementById('sidebar-toggle-btn'),
@@ -669,6 +670,20 @@ function loadChat(chatId) {
     renderRoomTabs();
 
     // Mobile: Close sidebar after selecting chat
+    if (window.innerWidth <= 768) {
+        elements.appWrapper.classList.add('sidebar-closed');
+    }
+}
+
+function goHome() {
+    // Clear current chat and show welcome screen
+    currentChatId = null;
+    setCurrentChatId(null);
+    chatHistory = [];
+    renderChatHistory();
+    renderChatList();
+
+    // Mobile: Close sidebar
     if (window.innerWidth <= 768) {
         elements.appWrapper.classList.add('sidebar-closed');
     }
@@ -2095,6 +2110,7 @@ function init() {
             elements.appWrapper.classList.add('sidebar-closed');
         }
     });
+    elements.homeBtn.addEventListener('click', goHome);
     elements.newChatBtn.addEventListener('click', () => {
         const newChat = createNewChat();
         loadChat(newChat.id);

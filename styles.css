@@ -124,6 +124,29 @@ body {
     gap: var(--space-xs);
 }
 
+.sidebar-home-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.sidebar-home-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--accent-primary);
+}
+
+.sidebar-home-btn:active {
+    transform: scale(0.95);
+}
+
 .sidebar-action-btn {
     display: flex;
     align-items: center;
