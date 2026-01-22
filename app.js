@@ -1488,6 +1488,15 @@ async function handleSendMessage() {
     if (!message && pendingAttachments.length === 0) return;
     if (isLoading) return;
 
+    // If no chat is open (home screen), create a new chat first
+    if (!currentChatId) {
+        const newChat = createNewChat();
+        currentChatId = newChat.id;
+        setCurrentChatId(currentChatId);
+        chatHistory = [];
+        renderChatList();
+    }
+
     // Capture attachments before clearing
     const attachments = [...pendingAttachments];
 
