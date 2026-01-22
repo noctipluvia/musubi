@@ -648,19 +648,25 @@ function createNewChat(startInRoom = null) {
 function deleteChat(chatId) {
     let chats = getChatList();
     chats = chats.filter(c => c.id !== chatId);
-    saveChatList(chats);
+
+    // Save updated chat list
+    localStorage.setItem(CONFIG.STORAGE_KEYS.CHATS, JSON.stringify(chats));
 
     // Remove chat's messages
     localStorage.removeItem(`musubi_chat_${chatId}`);
 
-    // If deleting current chat, switch to another or create new
+    // If deleting current chat, go back to home
     if (currentChatId === chatId) {
-        if (chats.length > 0) {
-            loadChat(chats[0].id);
-        } else {
-            const newChat = createNewChat();
-            loadChat(newChat.id);
-        }
+        currentChatId = null;
+        setCurrentChatId(null);
+        chatHistory = [];
+
+        // Reset to default room (リビング)
+        const rooms = getRoomList();
+        currentRoomId = rooms[0]?.id;
+
+        renderChatHistory();
+        renderRoomTabs();
     }
 
     renderChatList();
@@ -689,8 +695,14 @@ function goHome() {
     currentChatId = null;
     setCurrentChatId(null);
     chatHistory = [];
+
+    // Reset to default room (リビング - first room)
+    const rooms = getRoomList();
+    currentRoomId = rooms[0]?.id;
+
     renderChatHistory();
     renderChatList();
+    renderRoomTabs();
 
     // Mobile: Close sidebar
     if (window.innerWidth <= 768) {
