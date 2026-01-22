@@ -667,6 +667,11 @@ function loadChat(chatId) {
     renderChatHistory();
     renderChatList();
     renderRoomTabs();
+
+    // Mobile: Close sidebar after selecting chat
+    if (window.innerWidth <= 768) {
+        elements.appWrapper.classList.add('sidebar-closed');
+    }
 }
 
 function switchRoom(roomId) {
@@ -2055,11 +2060,26 @@ function init() {
     renderChatList();
     renderRoomTabs();
 
+    // Mobile: Start with sidebar closed
+    if (window.innerWidth <= 768) {
+        elements.appWrapper.classList.add('sidebar-closed');
+    }
+
     // Update UI state
     updateSendButtonState();
 
     // Event listeners - Sidebar
     elements.sidebarToggleBtn.addEventListener('click', toggleSidebar);
+
+    // Mobile: Close sidebar when clicking overlay
+    elements.appWrapper.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 &&
+            !elements.appWrapper.classList.contains('sidebar-closed') &&
+            !elements.sidebar.contains(e.target) &&
+            !elements.sidebarToggleBtn.contains(e.target)) {
+            elements.appWrapper.classList.add('sidebar-closed');
+        }
+    });
     elements.newChatBtn.addEventListener('click', () => {
         const newChat = createNewChat();
         loadChat(newChat.id);
