@@ -120,7 +120,6 @@ const elements = {
     fileInput: document.getElementById('file-input'),
     attachmentsPreview: document.getElementById('attachments-preview'),
     settingsBtn: document.getElementById('settings-btn'),
-    clearChatBtn: document.getElementById('clear-chat-btn'),
     settingsModal: document.getElementById('settings-modal'),
     clearModal: document.getElementById('clear-modal'),
     modalClose: document.getElementById('modal-close'),
@@ -219,7 +218,17 @@ function saveChatHistory() {
 function clearChatHistory() {
     chatHistory = [];
     if (currentChatId) {
+        // Remove chat history data
         localStorage.removeItem(`musubi_chat_${currentChatId}`);
+
+        // Remove from chat list
+        const chats = getChatList();
+        const updatedChats = chats.filter(c => c.id !== currentChatId);
+        localStorage.setItem(CONFIG.STORAGE_KEYS.CHATS, JSON.stringify(updatedChats));
+
+        // Go back to home screen
+        currentChatId = null;
+        setCurrentChatId(null);
     }
 }
 
@@ -2022,6 +2031,7 @@ function handleClearChatClose() {
 function handleClearChatConfirm() {
     clearChatHistory();
     renderChatHistory();
+    renderChatList();
     hideModal(elements.clearModal);
 }
 
@@ -2137,8 +2147,7 @@ function init() {
         updateProviderUI(e.target.value);
     });
 
-    // Event listeners - Clear chat
-    elements.clearChatBtn.addEventListener('click', handleClearChatOpen);
+    // Event listeners - Clear chat modal (can be triggered via settings or elsewhere)
     elements.clearModalClose.addEventListener('click', handleClearChatClose);
     elements.cancelClear.addEventListener('click', handleClearChatClose);
     elements.confirmClear.addEventListener('click', handleClearChatConfirm);
