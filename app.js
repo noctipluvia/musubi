@@ -2020,6 +2020,19 @@ function init() {
         rooms = getRoomList();
     }
 
+    // Sort rooms to default order: リビング → 灯の書斎 → 雨音の間
+    const defaultOrder = CONFIG.DEFAULT_ROOMS.map(r => r.name);
+    rooms.sort((a, b) => {
+        const indexA = defaultOrder.indexOf(a.name);
+        const indexB = defaultOrder.indexOf(b.name);
+        // Default rooms come first in order, custom rooms at the end
+        if (indexA === -1 && indexB === -1) return 0;
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+    });
+    saveRoomList(rooms);
+
     // Initialize chats
     let chats = getChatList();
     const savedCurrentChat = getCurrentChatId();
@@ -2035,27 +2048,29 @@ function init() {
         chats = getChatList();
     }
 
-    // Create default chat if none exists
-    if (chats.length === 0) {
-        const newChat = createNewChat();
-        chats = getChatList();
-    }
+    // Set current chat (don't create new chat automatically)
+    if (chats.length > 0) {
+        if (savedCurrentChat && chats.find(c => c.id === savedCurrentChat)) {
+            currentChatId = savedCurrentChat;
+            const chat = chats.find(c => c.id === currentChatId);
+            currentRoomId = chat?.currentRoomId || rooms[0]?.id;
+        } else {
+            currentChatId = chats[0].id;
+            setCurrentChatId(currentChatId);
+            const chat = chats.find(c => c.id === currentChatId);
+            currentRoomId = chat?.currentRoomId || rooms[0]?.id;
+        }
 
-    // Set current chat
-    if (savedCurrentChat && chats.find(c => c.id === savedCurrentChat)) {
-        currentChatId = savedCurrentChat;
-        const chat = chats.find(c => c.id === currentChatId);
-        currentRoomId = chat?.currentRoomId || rooms[0]?.id;
+        // Load current chat's history
+        chatHistory = migrateMessageFormat(getChatHistory(currentChatId));
+        saveChatHistory();
     } else {
-        currentChatId = chats[0].id;
-        setCurrentChatId(currentChatId);
-        const chat = chats.find(c => c.id === currentChatId);
-        currentRoomId = chat?.currentRoomId || rooms[0]?.id;
+        // No chats - show home screen with welcome message
+        currentChatId = null;
+        currentRoomId = rooms[0]?.id;
+        chatHistory = [];
     }
 
-    // Load current chat's history
-    chatHistory = migrateMessageFormat(getChatHistory(currentChatId));
-    saveChatHistory();
     renderChatHistory();
     renderChatList();
     renderRoomTabs();
